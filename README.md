@@ -2,9 +2,15 @@ ARM7
 ====
 Implemetation of pipelined ARM7TDMI processor in Verilog.
 
-DeepPipeline.v is the main module. It contains the controller and pipeline.
+See docs folder for datasheets and design documents of this processor. 
+I have used 6-stage pipleline instead suggested 3-stage pipeline.
+
+A not-so-descriptive but useful report containing some design details is availble in 'Report' folder
+
+DeepPipeline.v is the top module. It contains the controller and pipeline.
 
 I tried to make the project as modular as possible. Still, pretty complex.
+
 
 Modules
 ------
@@ -37,3 +43,4 @@ View all signals by running 'view.bat'
 Currently, Machine code corresponding to 'fib.s' file is in instruction cache.
 
 So, search for 'Write_enable', 'Write_address', 'Write_data' signals and view them to check for correctness of Fibonacci program.
+
