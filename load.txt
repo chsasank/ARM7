@@ -1,0 +1,18 @@
+Preindexed:
+The offset modification is performed *before* the
+base is used as the transfer address.
+
+The W bit gives optional auto increment and decrement addressing modes.
+The modified base value may be written back into the base (W=1), or the old base value may be kept (W=0).
+
+So, alu result will be used for writing/reading. and This W bit says if this alu result is written to base register or not.
+
+Postindexed:
+The offset modification is performed *after* the
+base is used as the transfer address.
+
+In the case of post-indexed addressing, the write back bit is
+redundant. Therefore post-indexed data transfers always write back the modified base. 
+
+So, alu result will not be used for writing/reading, rather out_data from base register will be used.
+No matter what W bit is, we write alu_result to base register.

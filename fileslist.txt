@@ -1,0 +1,10 @@
+alu.v
+shifter.v
+data_cache.v
+register.v
+instr_cache.v
+instr_decode.v
+mult.v
+cond.v
+deepPipeline.v
+tb.v

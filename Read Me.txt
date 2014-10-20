@@ -1,0 +1,3 @@
+View all signals by running 'view.bat'
+Currently, Machine code corresponding to 'fib.s' file is in instruction cache.
+So, search for 'Write_enable', 'Write_address', 'Write_data' signals and view them to check for correctness of Fibonacci program.

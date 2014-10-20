@@ -1,0 +1,110 @@
+Verilog Primer: http://cva.stanford.edu/people/davidbbs/classes/ee108a/winter0607%20labs/ee108a_nham_intro_to_verilog.pdf
+
+Online and better instruction summary: 
+http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.ddi0234b/i1010871.html
+
+This should be helpful too:
+http://users.ece.utexas.edu/~valvano/EE345M/Arm_EE382N_4.pdf
+
+Goal: Make and test all required modules
+
+Datapath:
+1. Decide upon control pts and inputs of each block by going through instructions
+Controller:
+2. First do multi cycle without pipelining, but do separate the stages using comments.
+3. Please Comment every goddamn register and loop etc you use so that others can understand. Especially true for controller. 
+
+
+Tentative list of modules and control signals:
+Memory type blocks:
+1. Register Bank
+inputs:
+in_address1
+in_address2
+in_address3
+in_address4	//write address
+in_data
+clk
+write_enable
+
+outputs:
+out_data1
+out_data2
+out_data3
+
+//top module need to take care of directing the output data to corresponding ALU and barrel shifter
+//input address are dependent on instruction, so it is also depend on opcode, we can tweak it and implement a mux to redirect corresponding input to register bank without depending on control store/ control signals which we get after decode stage.. pretty much making register fetch independent of instruction decode there by parallelizing it. This too needs to be done in top module
+// Imp note here, there is a shitty instruction to load multiple memory words into registers.. Stalls required, can be done only after decode stage, can’t afford to make register bank dependent on this particular instruction. We’ll not write this instruction now
+ 
+2. Instruction Cache 
+//fill like above
+3. Data-cache
+4. Address register+incrementer
+
+Controller note: While writing back take nzcv flags from ALU.
+
+http://www.cc.gatech.edu/~hyesoon/spr10/lec_arm2.pdf
+http://users.ece.utexas.edu/~valvano/EE345M/Arm_EE382N_4.pdf
+http://netwinder.osuosl.org/pub/netwinder/docs/arm/ARM7500FEvB_3.pdf
+
+
+Execution blocks
+5. ALU
+
+input:
+opcode
+	opcode obtained directly from instruction
+
+operand_1
+	operand 1 (obtained from register bank)
+
+operand_2
+	operand 2 (obtained from shifter)
+
+nzcv_old
+	this is nzcv we get by reading CSPR register before execution. one before update
+	
+c_from_shifter
+	this is the carry we get from shifter
+
+
+
+output:
+isWriteback
+	Determines if we have to writeback result to register or not.	Write only if 1.(we 	shouldn’t be writing back for instructions like cmp,tst etc)
+
+result
+	Result of alu operation. Have to writeback to registerfile only 	if isWriteback = 1
+	
+nzcv
+	condition codes computed from alu operation.(accounted for the fact that we have to use carry from shifter for logical operations and for cases where we don't have to change it)
+
+
+6. Barrel shifter
+
+inputs
+	cin
+		this is carry flag we get by reading CSPR register befor shifting. 
+		
+	instr_bit_25
+		Instr[25]
+		
+	instr12[11:0]
+		instr[11:0]
+	rs
+		data from register file
+	rm
+		data from register file
+		
+outputs
+	operand2
+		for alu
+	c_to_alu
+		updated c (to alu)
+7. Multiplier
+
+inputs:
+
+
+
+
