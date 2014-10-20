@@ -1,0 +1,60 @@
+\documentclass[a4paper]{article}
+
+
+\title{ARM7TDMI Processor Implementation in Verilog}
+
+\author{Sasank Chilamkurthy, Varun Bairaboina, Bhanu Vikas, Nithin Nethipudi}
+
+\date{May 2014}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We have implemented pipelined version of ARM v7 processor.
+\end{abstract}
+
+
+
+\section{Pipeline stages design}
+We have 6 pipeline stages: 
+
+\begin{enumerate}
+	\item Instruction Fetch (F) 
+	
+	\item Register Read (R)
+
+	\item Multiplier (M)
+
+	\item ALU 
+
+	\item Memory (MEM)
+
+	\item Writeback (W)
+
+\end{enumerate}
+
+	\subsection{Instruction Fetch (F)} 
+		We fetching instructions from instruction cache and determine type of instruction. There is not much complex logic here.
+	
+	\subsection{Register Read (R)} 
+		We read all poosible registers that can be needed by a instruction.Also, forwarding decisions are made here.
+
+	\subsection{Multiplier (M)}
+		Multiplier block does any possible multiplications required.
+
+	\subsection{ALU} 
+		This stage has ALU, Barrel shifter and condition field checker.
+		Flag outputs from ALU is forwarded to the same stage
+		i.e. fed back to itself.
+
+	\subsection{Memory (MEM)} 
+		Accesses memory for Load/store instructions.
+
+	\subsection{Writeback} 
+		We write back to registers and PC depending on instruction.
+
+\section{Implementation details}
+
+We made different modules for each blocks mentioned above and instantiated them in top level controller module. We maintained a \texttt{will\_this\_be\_executed} signal at each pipeline stage to facilitate easier flushing and bubble insertion. Code is loaded by editing \texttt{initial} block of instruction cache module. We checked design with the standard fibonacci sequence generator program.
+
+\end{document}
