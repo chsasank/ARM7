@@ -5,7 +5,7 @@ Implemetation of pipelined ARM7TDMI processor in Verilog.
 See docs folder for datasheets and design documents of this processor. 
 I have used 6-stage pipleline instead of suggested 3-stage pipeline.
 
-A not-so-descriptive but useful report containing some design details is availble in 'Report' folder
+A not-so-descriptive but useful report containing some design details is available in 'Report' folder
 
 DeepPipeline.v is the top module. It contains the controller and pipeline.
 
