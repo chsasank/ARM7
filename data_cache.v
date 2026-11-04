@@ -19,7 +19,7 @@ input [N-1 :0] in_data;
 always @ (posedge read_enable, posedge write_enable)
 begin
 	if(read_enable)	begin
-		if(isByte == 1) out_data = {24'hzzzzzz, M[data_address[addr_width-1:0]]};
+		if(isByte == 1) out_data = {24'h000000, M[data_address[addr_width-1:0]]};
 		else out_data = { M[data_address[addr_width-1:0]+3], M[data_address[addr_width-1:0]+2], M[data_address[addr_width-1:0]+1] , M[data_address[addr_width-1:0]]};
 	end	
 	
