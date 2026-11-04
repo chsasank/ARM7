@@ -53,7 +53,12 @@ module bshift(instr_bit_25,imm_value, Rm, Rs, operand2, cin, c_to_alu, direct_da
 			// logical shift right by immediate
 			if(imm_value[6:4] == 3'd2) begin
 				in = Rm;
-				{out, c_to_alu} = {in,cin} >> imm_value[11:7];
+				// A zero immediate encodes LSR #32.
+				if(imm_value[11:7] == 5'd0) begin
+					out = 0;
+					c_to_alu = in[n-1];
+				end
+				else {out, c_to_alu} = {in,cin} >> imm_value[11:7];
 			
 			end
 			
@@ -68,8 +73,12 @@ module bshift(instr_bit_25,imm_value, Rm, Rs, operand2, cin, c_to_alu, direct_da
 			//Arithmetic shift right by immediate
 			if(imm_value[6:4] == 3'd4) begin
 				in = Rm;
-				//out[7] = in[7]; // preserves sign
-				if(in[n-1]){junk,out, c_to_alu} = {32'hFFFFFFFF,in,cin} >> imm_value[11:7];
+				// A zero immediate encodes ASR #32.
+				if(imm_value[11:7] == 5'd0) begin
+					out = {n{in[n-1]}};
+					c_to_alu = in[n-1];
+				end
+				else if(in[n-1]){junk,out, c_to_alu} = {32'hFFFFFFFF,in,cin} >> imm_value[11:7];
 				else {out, c_to_alu} = {in,cin} >> imm_value[11:7];
 			end
 			
