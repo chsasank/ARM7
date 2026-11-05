@@ -168,7 +168,15 @@ wire will_this_be_executed;
 wire c_to_alu;
 wire[31:0] shifter_result;
 
-reg[3:0] nzcv_forward;	//connected to alu. fed from alu.
+reg[3:0] nzcv_forward;	//flags from the last executed flag-setting instruction.
+wire[3:0] nzcv_effective;
+
+// The ALU always computes candidate flags, even for skipped instructions
+// and address calculations. Only a live flag writer may replace NZCV.
+assign nzcv_effective = (MUL_ALU_will_this_be_executed && !MUL_ALU_flush &&
+                        MUL_ALU_instr[20] &&
+                        (MUL_ALU_type == `dataProcessing || MUL_ALU_type == `multiply))
+                       ? alu_nzcv : nzcv_forward;
 
 reg use_shifter;
 reg[31:0] alu_operand_1;
@@ -205,7 +213,7 @@ alu ALU(
 							);
 
 cond conditionFieldChecker(
-							.nzcv(alu_nzcv),	//we check for condition right after calculation of nzcv flags. Check this with previous instruction.
+							.nzcv(nzcv_effective),	//include the preceding instruction only if it writes flags.
 							.condition_code(R_MUL_instr[31:28]),//i.e  with instruction from previous pipeline
 							
 							.will_this_be_executed(will_this_be_executed)
@@ -782,7 +790,7 @@ always @(posedge clk) begin
 		ALU_MEM_alu_nzcv 	 = alu_nzcv;
 		ALU_MEM_alu_is_writeback  = alu_is_writeback;
 		ALU_MEM_flush		 = MUL_ALU_flush;
-		nzcv_forward = alu_nzcv;	//forwarding!
+		nzcv_forward = nzcv_effective;	//forward only effective flags
 		/*******ALU/MEM*****/
 
 		/*******MUL/ALU*****/

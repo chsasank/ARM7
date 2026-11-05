@@ -92,6 +92,9 @@ module bshift(instr_bit_25,imm_value, Rm, Rs, operand2, cin, c_to_alu, direct_da
 				in=Rm;
 				shiftby[7:0] = Rs[7:0];
 				{junk,out,c_to_alu} = {in,in,cin} >> shiftby[4:0]; // [4:0] because.. if input is given as 100 it is enough to shift with 4 .. i.e 100mod 32
+				// A nonzero multiple of 32 carries out bit 31 without changing Rm.
+				if(shiftby[7:0] != 8'd0 && shiftby[4:0] == 5'd0)
+					c_to_alu = in[n-1];
 			end
 			
 			// RRX
