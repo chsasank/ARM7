@@ -177,7 +177,7 @@ reg[3:0] alu_opcode;
 
 
 bshift BarrelShifter(		
-							.instr_bit_25(MUL_ALU_instr[25]),
+							.instr_bit_25((MUL_ALU_type == `loadStoreUnsigned) ? 1'b0 : MUL_ALU_instr[25]),
 							.imm_value(MUL_ALU_instr[11:0]), 
 							.Rs(MUL_ALU_out_data_3), 
 							.Rm(MUL_ALU_out_data_4), 
@@ -596,7 +596,9 @@ always@(*) begin
 		`loadStoreUnsigned: begin
 			//address calculation
 			alu_operand_1 = MUL_ALU_out_data_1;		//base register.
-			use_shifter = 1;	//offset			//alu_operand_2 = shifter_result;
+			// Single transfers use either a 12-bit immediate or a shifted register.
+			use_shifter = MUL_ALU_instr[25];
+			alu_operand_2 = {20'b0, MUL_ALU_instr[11:0]};
 			alu_opcode = (MUL_ALU_instr[23]==1)?`ADD: `SUB;	//depending on up bit
 		end
 
