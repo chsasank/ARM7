@@ -54,7 +54,7 @@ case(condition_code)
 	end	
 	
 	9: begin //LS
-	if(nzcv[1] == 0 && nzcv[2] == 1)  will_this_be_executed = 1;
+	if(nzcv[1] == 0 || nzcv[2] == 1)  will_this_be_executed = 1;
 	else will_this_be_executed = 0;	
 	end	
 	
@@ -74,7 +74,7 @@ case(condition_code)
 	end	
 	
 	13: begin //LE
-	if(nzcv[2] == 0 || nzcv[3] != nzcv[0])  will_this_be_executed = 1;
+	if(nzcv[2] == 1 || nzcv[3] != nzcv[0])  will_this_be_executed = 1;
 	else will_this_be_executed = 0;	
 	end	
 	
