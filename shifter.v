@@ -77,8 +77,8 @@ module bshift(instr_bit_25,imm_value, Rm, Rs, operand2, cin, c_to_alu, direct_da
 			if(imm_value[6:4] == 3'd5) begin
 				in = Rm;
 				shiftby[7:0] = Rs[7:0];
-				if(in[n-1]) {junk,out, c_to_alu} = {32'hFFFFFFFF,in,cin} >> shiftby[7:0];
-				else {out,c_to_alu} = {in,cin} >> shiftby[7:0];
+				// Sign extend both the result and carry for large register shifts.
+				{out,c_to_alu} = $signed({in,cin}) >>> shiftby[7:0];
 			end
 			
 			// Rotate Right by immediate
