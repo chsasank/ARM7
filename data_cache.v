@@ -6,7 +6,7 @@ parameter data_width = 8;	//size of each data read, will be of width 16, i.e, ha
 parameter N =32;
 parameter addr_width = 12;	//It determines the number of data (half)words in memory
 
-reg [data_width-1:0] M [2^addr_width-1:0];	//2^addr_width-1, 16 bit data
+reg [data_width-1:0] M [2**addr_width-1:0];	//2^addr_width-1, 16 bit data
 input [N-1 :0] data_address;
 input read_enable;
 input write_enable;
